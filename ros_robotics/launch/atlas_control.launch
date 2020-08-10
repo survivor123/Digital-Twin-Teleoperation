@@ -1,0 +1,17 @@
+
+<launch>
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find drcsim_gazebo)/config/whole_body_trajectory_controller_v5.yaml" command="load"/>
+
+  <!-- load the controllers -->
+  <node name="control_spawner" pkg="controller_manager" type="spawner" respawn="false"
+	output="screen" ns="/atlas" args="atlas_controller"/>
+
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+	respawn="false" output="screen">
+    <remap from="/joint_states" to="/atlas/joint_states" />
+  </node>
+
+</launch>

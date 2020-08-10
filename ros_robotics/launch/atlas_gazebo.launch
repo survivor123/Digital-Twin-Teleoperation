@@ -1,0 +1,40 @@
+<launch>
+  <!-- We resume the logic in gazebo_ros package empty_world.launch, -->
+  <!-- changing only the name of the world to be launched -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find my_robotatlas)/worlds/atlas_world.world"/>
+   
+    <arg name="paused" default="false"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="gui" default="true"/>
+    <arg name="headless" default="false"/>
+    <arg name="debug" default="false"/>
+  </include>
+
+  <!-- Load the URDF into the ROS Parameter Server -->
+  <param name="robot_description"
+	 command="$(find xacro)/xacro.py '$(find atlas_description)/robots/atlas_v5.urdf.xacro'" />
+
+  <!-- Spawn rrbot into Gazebo -->
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+     args="-param robot_description -urdf -x 0 -y 0 -z 0.938 -model atlas" />
+
+  <!-- We do not have a robot connected, so publish fake joint states -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="true"/>
+  </node>
+
+  <!-- Given the published joint states, publish tf for the robot links -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+
+ <node name="rviz" pkg="rviz" type="rviz" required="true" args="-d $(find my_robotatlas)/rviz/atlas.rviz"/> 
+
+ <include file="$(find my_robotatlas)/launch/atlas_control.launch"/>
+
+
+  <!-- Robot commands node 
+  <node pkg="drcsim_gazebo" name="reset_pose.py" type="5steps.py" cwd="node" output="screen">
+  </node> -->
+
+</launch>
+

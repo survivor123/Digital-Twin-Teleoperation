@@ -1,0 +1,6 @@
+controller_list:
+  - name: fake_brazo_controller
+    joints:
+      - joint_world
+      - joint_base_mid
+      - joint_mid_top

@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: ros_robotics
+    relative_path: urdf/rrbot44.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/rrbot.srdf
+  CONFIG:
+    author_name: luis
+    author_email: luis@otro.otro
+    generated_timestamp: 1596235566
